@@ -9,25 +9,41 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: vitepress-production
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
 
+      - name: Pin npm version
+        run: npm install --global npm@10.8.0 --no-audit --no-fund
+
+      - name: Show tool versions
+        run: |
+          node --version
+          npm --version
+
+      # 暂时使用 npm install，避开当前 npm ci 的异常
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build VitePress
         run: npm run docs:build
+
+      - name: Verify build output
+        run: test -f docs/.vitepress/dist/index.html
 
       - name: Configure SSH
         env:
@@ -35,11 +51,21 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
           install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
-      - name: Deploy files
+      - name: Test SSH connection
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes \
+              "$DEPLOY_USER@$DEPLOY_HOST" \
+              "echo SSH connection OK"
+
+      - name: Deploy static files
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -47,4 +73,3 @@ jobs:
           rsync -az --delete \
             docs/.vitepress/dist/ \
             "$DEPLOY_USER@$DEPLOY_HOST:/var/www/vitepress/"
-
