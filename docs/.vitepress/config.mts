@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "A403 AI 文档",
   description: "Codex 从 0 上手、工作流与远程使用指南",
-  base: '/docs/',
+  base: '/',
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
