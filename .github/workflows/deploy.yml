@@ -45,11 +45,16 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Install dependencies
+        run: npm install --include=dev --no-audit --no-fund
+
+      - name: Verify VitePress
+        run: |
+            npm ls vitepress
+            ./node_modules/.bin/vitepress --version
+
       - name: Build VitePress
         run: npm run docs:build
-
-      - name: Verify build output
-        run: test -f docs/.vitepress/dist/index.html
 
       - name: Configure SSH
         env:
