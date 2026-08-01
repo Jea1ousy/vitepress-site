@@ -37,8 +37,8 @@ jobs:
             --no-audit \
             --no-fund
 
-      - name: Verify VitePress
-        run: ./node_modules/.bin/vitepress --version
+      - name: Check dependencies
+        run: npm ls vitepress --depth=0
 
       - name: Build VitePress
         run: npm run docs:build
