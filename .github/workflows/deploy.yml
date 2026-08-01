@@ -30,6 +30,12 @@ jobs:
       - name: Pin npm version
         run: npm install --global npm@10.8.0 --no-audit --no-fund
 
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+        
       - name: Show tool versions
         run: |
           node --version
