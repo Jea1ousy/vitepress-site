@@ -19,32 +19,26 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Pin npm version
-        run: npm install --global npm@10.8.0 --no-audit --no-fund
-
-      - name: Configure npm registry
-        run: npm config set registry https://registry.npmjs.org/
-
-      - name: Clean npm workspace
-        run: |
-          rm -rf node_modules
-          npm cache clean --force
+          node-version: 20
 
       - name: Install dependencies
-        run: npm install --include=dev --no-audit --no-fund
+        run: |
+          rm -rf node_modules
+          npm install \
+            --include=dev \
+            --package-lock=false \
+            --registry=https://registry.npmjs.org/ \
+            --no-audit \
+            --no-fund
 
       - name: Verify VitePress
-        run: |
-          npm ls vitepress --depth=0
-          ./node_modules/.bin/vitepress --version
+        run: ./node_modules/.bin/vitepress --version
 
       - name: Build VitePress
         run: npm run docs:build
@@ -67,10 +61,12 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          ssh -o BatchMode=yes \
-              -o StrictHostKeyChecking=yes \
-              "$DEPLOY_USER@$DEPLOY_HOST" \
-              "echo SSH connection OK"
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "echo SSH connection OK"
 
       - name: Deploy static files
         env:
@@ -78,5 +74,6 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
           rsync -az --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes" \
             docs/.vitepress/dist/ \
             "$DEPLOY_USER@$DEPLOY_HOST:/var/www/vitepress/"
