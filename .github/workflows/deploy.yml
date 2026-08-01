@@ -25,20 +25,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: |
-          rm -rf node_modules
-          npm install \
-            --include=dev \
-            --package-lock=false \
-            --registry=https://registry.npmjs.org/ \
-            --no-audit \
-            --no-fund
+        run: npm ci --include=dev --no-audit --no-fund --prefer-offline
 
-      - name: Check dependencies
-        run: npm ls vitepress --depth=0
+      - name: Verify dependencies
+        run: |
+          npm ls vitepress --depth=0
+          node -p "require('./node_modules/vitepress/package.json').version"
 
       - name: Build VitePress
         run: npm run docs:build
@@ -63,6 +60,7 @@ jobs:
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
+            -o IdentitiesOnly=yes \
             -o BatchMode=yes \
             -o StrictHostKeyChecking=yes \
             "$DEPLOY_USER@$DEPLOY_HOST" \
@@ -74,6 +72,6 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
           rsync -az --delete \
-            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes" \
+            -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
             docs/.vitepress/dist/ \
             "$DEPLOY_USER@$DEPLOY_HOST:/var/www/vitepress/"
