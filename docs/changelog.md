@@ -7,6 +7,14 @@ outline: false
 
 记录 A403 AI 文档站的内容与结构变化。
 
+## 2026-08-02
+
+### 新增 Zotero 章节
+
+- 增加 Zotero Connector、Translate for Zotero、LLM 服务和 Notero 配置说明。
+- 补充 Zotero、Notion、PDF 和 API key 之间的数据边界与安全建议。
+- 增加 Better BibTeX、Better Notes 等可选增强项及版本兼容提醒。
+
 ## 2026-08-01
 
 ### 文档结构调整

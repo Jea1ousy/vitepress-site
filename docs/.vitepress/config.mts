@@ -13,7 +13,8 @@ export default defineConfig({
           { text: '日常工作流', link: '/codex-workflow' },
           { text: '代理、SSH 与 tmux', link: '/codex-remote' },
           { text: '第三方 provider', link: '/codex-providers' },
-          { text: '故障排查与参考', link: '/codex-troubleshooting' }
+          { text: '故障排查与参考', link: '/codex-troubleshooting' },
+          { text: 'Zotero 配置与增强', link: '/zotero' }
         ]
       },
       { text: '更新日志', link: '/changelog' }
@@ -38,6 +39,12 @@ export default defineConfig({
           { text: '代理、SSH 与 tmux', link: '/codex-remote' },
           { text: 'CC Switch 与第三方 provider', link: '/codex-providers' },
           { text: '故障排查与参考', link: '/codex-troubleshooting' }
+        ]
+      },
+      {
+        text: '知识管理',
+        items: [
+          { text: 'Zotero 配置与增强', link: '/zotero' }
         ]
       }
     ]
