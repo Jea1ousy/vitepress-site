@@ -30,38 +30,33 @@ outline: deep
 B 站个人空间通常会通过 `X-Frame-Options` 或 `Content-Security-Policy` 禁止被其他网站 iframe 嵌入。使用外链可以避免出现空白框，同时保留完整的主页功能。
 :::
 
-## 视频嵌入
+## 投稿视频
 
-将下面的 `BVxxxxxxxxxxx` 替换成真实视频的 BV 号即可。BV 号可以从 B 站视频地址中找到，例如 `https://www.bilibili.com/video/BVxxxxxxxxxxx`。
+视频卡片可以横向滚动，适合集中展示多个投稿；点击卡片中的播放按钮后，在当前卡片内播放。
 
-<div class="bilibili-video-wrap">
-  <iframe
-    src="https://player.bilibili.com/player.html?bvid=BV1yVNU6xERx&page=1&high_quality=1&danmaku=0"
-    title="B 站视频播放器"
-    loading="lazy"
-    allowfullscreen
-    referrerpolicy="no-referrer-when-downgrade"
-  ></iframe>
+<div class="bilibili-video-scroller">
+  <article class="bilibili-video-card">
+    <div class="bilibili-video-frame">
+      <iframe
+        src="https://player.bilibili.com/player.html?bvid=BV1yVNU6xERx&page=1&high_quality=1&danmaku=0"
+        title="B 站视频 BV1yVNU6xERx"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <div class="bilibili-video-meta">
+      <strong>BV1yVNU6xERx</strong>
+      <a href="https://www.bilibili.com/video/BV1yVNU6xERx" target="_blank" rel="noreferrer">在 B 站打开 ↗</a>
+    </div>
+  </article>
+
+  <!-- 复制上面的 article，并替换 bvid、title 和链接，即可继续添加投稿。 -->
 </div>
 
-::: warning 播放器提示
-示例 BV 号是占位符，不会播放视频。请替换成实际 BV 号；如果播放器被浏览器拦截，可点击视频标题回到 B 站观看。
+::: tip 添加投稿
+将新的 BV 号复制到 `.bilibili-video-scroller` 中，卡片会自动排列为横向列表。B 站接口有访问频率限制，因此页面使用手动维护的 BV 号，不会虚构或缓存投稿数据。
 :::
-
-### 添加多个视频
-
-复制下面的播放器块，为每个视频替换 `bvid` 参数和 `title`：
-
-```html
-<div class="bilibili-video-wrap">
-  <iframe
-    src="https://player.bilibili.com/player.html?bvid=你的BV号&page=1&high_quality=1&danmaku=0"
-    title="视频标题"
-    loading="lazy"
-    allowfullscreen
-  ></iframe>
-</div>
-```
 
 <style>
 .bilibili-profile {
@@ -106,21 +101,49 @@ B 站个人空间通常会通过 `X-Frame-Options` 或 `Content-Security-Policy`
   background: var(--vp-c-brand-soft);
 }
 
-.bilibili-video-wrap {
-  position: relative;
-  width: 100%;
+.bilibili-video-scroller {
+  display: flex;
+  gap: 16px;
   margin: 24px 0;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #111;
-  aspect-ratio: 16 / 9;
+  padding: 4px 4px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
 }
 
-.bilibili-video-wrap iframe {
+.bilibili-video-card {
+  flex: 0 0 min(420px, 82vw);
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  scroll-snap-align: start;
+}
+
+.bilibili-video-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+}
+
+.bilibili-video-frame iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.bilibili-video-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+
+.bilibili-video-meta a {
+  color: var(--vp-c-brand-1);
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
