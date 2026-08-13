@@ -6,6 +6,7 @@ export default defineConfig({
   base: '/',
   themeConfig: {
     nav: [
+      { text: 'B 站 UP 主', link: '/bilibili' },
       {
         text: '文档',
         items: [
@@ -45,6 +46,12 @@ export default defineConfig({
         text: '知识管理',
         items: [
           { text: 'Zotero 配置与增强', link: '/zotero' }
+        ]
+      },
+      {
+        text: '视频资源',
+        items: [
+          { text: 'B 站 UP 主', link: '/bilibili' }
         ]
       }
     ]
