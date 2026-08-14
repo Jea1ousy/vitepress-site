@@ -1,156 +1,123 @@
 ---
-title: B 站 UP 主
-description: 访问 UP 主主页并在文档中播放 B 站视频
+title: LLM 架构学习地图
+description: 按知识主题梳理五道口纳什的 LLM 架构系列视频
 outline: deep
 ---
 
-# B 站 UP 主
+<script setup>
+import LlmArchitectureVideos from './.vitepress/theme/components/LlmArchitectureVideos.vue'
+</script>
 
-这里收录与本项目相关的 B 站 UP 主主页和视频。主页使用外链卡片，视频使用 B 站官方播放器地址嵌入。
+# LLM 架构学习地图
 
-## UP 主主页
+本页以 B 站 UP 主 **五道口纳什** 的“LLM 架构”合集为线索，整理大语言模型从核心计算模块到推理系统的关键知识。它不是按发布时间罗列视频，而是把内容重组为一条便于学习和回查的路径。
 
-<div class="bilibili-profile">
+<div class="creator-bar">
   <div>
-    <span class="bilibili-kicker">BILIBILI CREATOR</span>
-    <h2>88461692</h2>
-    <p>打开 B 站主页查看 UP 主资料、投稿和最新动态。</p>
+    <strong>五道口纳什</strong>
+    <span>现代人工智能的概念、原理与工程实践</span>
   </div>
-  <a
-    class="bilibili-profile-link"
-    href="https://space.bilibili.com/88461692?spm_id_from=333.337.0.0"
-    target="_blank"
-    rel="noreferrer"
-  >
-    访问主页 <span aria-hidden="true">↗</span>
-  </a>
+  <div class="creator-links">
+    <a href="https://space.bilibili.com/59807853" target="_blank" rel="noreferrer">UP 主主页</a>
+    <a href="https://space.bilibili.com/59807853/lists/6439923?type=season" target="_blank" rel="noreferrer">官方合集</a>
+  </div>
 </div>
 
-::: tip 为什么主页使用外链
-B 站个人空间通常会通过 `X-Frame-Options` 或 `Content-Security-Policy` 禁止被其他网站 iframe 嵌入。使用外链可以避免出现空白框，同时保留完整的主页功能。
+::: info 整理说明
+视频信息整理自“五道口纳什”的官方“合集·LLM架构”，截至 2026 年 8 月 14 日共 14 条。合集没有标为第 03 集的视频，而是在 01、02 之后收录了 K2 Thinking 和 Muon 优化器两条未编号内容；本页保留原始标题，并按知识主题重新分类。标有“充电专属”的视频需要相应观看权限。
 :::
 
-## 投稿视频
+## 什么是 LLM 架构
 
-视频卡片可以横向滚动，适合集中展示多个投稿；点击卡片中的播放按钮后，在当前卡片内播放。
+LLM 架构不只是 Transformer 结构图。要理解一个现代大模型，需要同时回答五类问题：信息如何表示、每一层如何计算、长上下文如何编码、生成时如何高效运行，以及视觉等新模态如何接入。
 
-<div class="bilibili-video-scroller">
-  <article class="bilibili-video-card">
-    <div class="bilibili-video-frame">
-      <iframe
-        src="https://player.bilibili.com/player.html?bvid=BV1yVNU6xERx&page=1&high_quality=1&danmaku=0"
-        title="B 站视频 BV1yVNU6xERx"
-        loading="lazy"
-        allowfullscreen
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </div>
-    <div class="bilibili-video-meta">
-      <strong>BV1yVNU6xERx</strong>
-      <a href="https://www.bilibili.com/video/BV1yVNU6xERx" target="_blank" rel="noreferrer">在 B 站打开 ↗</a>
-    </div>
-  </article>
+| 层次 | 关注点 | 典型问题 |
+| --- | --- | --- |
+| 表示与位置 | Token embedding、RoPE、上下文窗口 | 模型如何区分顺序、距离与长短上下文？ |
+| 核心计算块 | Attention、FFN、MoE、RMSNorm、残差与门控 | 参数放在哪里，哪些参数会在一次推理中被激活？ |
+| 推理系统 | Prefill、Decode、KV Cache、MTP、推测解码 | 为什么首字延迟和逐 Token 生成是两种不同负载？ |
+| 多模态扩展 | Vision Encoder、跨模态对齐、原生多模态 | 图像信息怎样进入语言模型并参与推理？ |
+| 训练与表征 | 优化器、梯度、Token 表征漂移 | 训练如何改变模型内部表示，又可能引入哪些异常？ |
 
-  <!-- 复制上面的 article，并替换 bvid、title 和链接，即可继续添加投稿。 -->
-</div>
+### 建议学习顺序
 
-::: tip 添加投稿
-将新的 BV 号复制到 `.bilibili-video-scroller` 中，卡片会自动排列为横向列表。B 站接口有访问频率限制，因此页面使用手动维护的 BV 号，不会虚构或缓存投稿数据。
-:::
+1. 先看 MoE、FFN、Attention 与 RMSNorm，建立模型骨架。
+2. 再看 RoPE 与 Attention Head，理解位置信息和注意力模式。
+3. 接着学习 Prefill、Decode、KV Cache 与推测解码，把结构连接到推理成本。
+4. 然后进入 VLM、Kimi K2.5/K3，观察前沿模型如何组合这些模块。
+5. 最后用 Muon 优化器与 Glitch Token 补齐训练和表征视角。
+
+## 分类视频
+
+每个分类都可以横向滚动。点击封面后才会加载 B 站播放器；同一时间只保留一个播放器，避免多个 iframe 同时占用网络和页面资源。
+
+<LlmArchitectureVideos />
+
+## 如何继续深入
+
+看视频时不要只记模块名，建议为每个架构维护一张对照表：参数量与激活参数量、Attention 变体、位置编码、FFN/MoE 结构、归一化位置、训练目标、推理阶段的显存和带宽瓶颈。遇到新模型时，先按这些维度拆解，再判断真正的结构创新在哪里。
 
 <style>
-.bilibili-profile {
+.creator-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   margin: 24px 0;
-  padding: 24px;
+  padding: 20px;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   background: var(--vp-c-bg-soft);
 }
 
-.bilibili-kicker {
-  color: var(--vp-c-brand-1);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.creator-bar strong,
+.creator-bar span {
+  display: block;
 }
 
-.bilibili-profile h2 {
-  margin: 8px 0 4px;
+.creator-bar strong {
+  margin-bottom: 4px;
+  font-size: 18px;
 }
 
-.bilibili-profile p {
-  margin: 0;
+.creator-bar span {
   color: var(--vp-c-text-2);
+  font-size: 14px;
 }
 
-.bilibili-profile-link {
+.creator-links {
+  display: flex;
   flex: 0 0 auto;
-  padding: 10px 16px;
+  gap: 10px;
+}
+
+.creator-links a {
+  padding: 8px 12px;
   border: 1px solid var(--vp-c-brand-1);
   border-radius: 6px;
   color: var(--vp-c-brand-1);
+  font-size: 14px;
   font-weight: 600;
   text-decoration: none;
 }
 
-.bilibili-profile-link:hover {
+.creator-links a:hover {
   background: var(--vp-c-brand-soft);
 }
 
-.bilibili-video-scroller {
-  display: flex;
-  gap: 16px;
-  margin: 24px 0;
-  padding: 4px 4px 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-}
-
-.bilibili-video-card {
-  flex: 0 0 min(420px, 82vw);
-  overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  background: var(--vp-c-bg-soft);
-  scroll-snap-align: start;
-}
-
-.bilibili-video-frame {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #111;
-}
-
-.bilibili-video-frame iframe {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.bilibili-video-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px;
-  font-size: 13px;
-}
-
-.bilibili-video-meta a {
-  color: var(--vp-c-brand-1);
-  white-space: nowrap;
-}
-
 @media (max-width: 640px) {
-  .bilibili-profile {
+  .creator-bar {
     align-items: flex-start;
     flex-direction: column;
-    gap: 16px;
+  }
+
+  .creator-links {
+    width: 100%;
+  }
+
+  .creator-links a {
+    flex: 1;
+    text-align: center;
   }
 }
 </style>

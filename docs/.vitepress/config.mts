@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/',
   themeConfig: {
     nav: [
-      { text: 'B 站 UP 主', link: '/bilibili' },
+      { text: 'LLM 架构', link: '/bilibili' },
       {
         text: '文档',
         items: [
@@ -51,7 +51,7 @@ export default defineConfig({
       {
         text: '视频资源',
         items: [
-          { text: 'B 站 UP 主', link: '/bilibili' }
+          { text: 'LLM 架构学习地图', link: '/bilibili' }
         ]
       }
     ]
