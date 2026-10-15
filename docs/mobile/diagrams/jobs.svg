@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 405" role="img" aria-labelledby="title desc">
+  <title id="title">普通 Job 与 SupervisorJob 的失败传播</title>
+  <desc id="desc">普通子任务非取消异常可传播给父并取消兄弟；监督子任务失败不自动取消兄弟，但仍需处理异常。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker><style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c}.h{font-size:21px;font-weight:700}.t{font-size:16px}.s{font-size:14px;fill:#516a82}.edge{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}.box{fill:#fff;stroke:#bed0e0;stroke-width:1.5}</style></defs>
+  <rect width="760" height="405" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">任务树：共同失败，还是允许独立失败？</text>
+  <text x="28" y="64" class="s">下图讨论子任务抛出非 CancellationException 的情况。</text>
+  <rect class="box" x="30" y="89" width="335" height="236" rx="12"/><rect class="box" x="395" y="89" width="335" height="236" rx="12"/>
+  <rect x="110" y="114" width="175" height="48" rx="8" fill="#dce9fa"/><text x="198" y="145" text-anchor="middle" class="t">普通父 Job</text>
+  <path class="edge" d="M170 162L105 219"/><path class="edge" d="M225 162L290 219"/>
+  <rect x="52" y="222" width="126" height="52" rx="8" fill="#fde5e4"/><text x="115" y="254" text-anchor="middle" class="t">A 失败</text>
+  <rect x="216" y="222" width="126" height="52" rx="8" fill="#fff1dd"/><text x="279" y="254" text-anchor="middle" class="t">B 被取消</text>
+  <path d="M74 218V186L109 155" fill="none" stroke="#c45757" stroke-width="2"/><text x="48" y="181" class="s">向上失败</text>
+  <text x="198" y="302" text-anchor="middle" class="s">适合结果必须共同成功的任务</text>
+  <rect x="468" y="114" width="190" height="48" rx="8" fill="#dce9fa"/><text x="563" y="145" text-anchor="middle" class="t">SupervisorJob</text>
+  <path class="edge" d="M530 162L467 219"/><path class="edge" d="M594 162L660 219"/>
+  <rect x="417" y="222" width="126" height="52" rx="8" fill="#fde5e4"/><text x="480" y="254" text-anchor="middle" class="t">A 失败</text>
+  <rect x="582" y="222" width="126" height="52" rx="8" fill="#e0f3ea"/><text x="645" y="254" text-anchor="middle" class="t">B 可继续</text>
+  <text x="563" y="302" text-anchor="middle" class="s">子失败不自动让兄弟一起失败</text>
+  <rect x="30" y="344" width="700" height="40" rx="8" fill="#fff1dd"/><text x="48" y="370" class="s">两者都向下响应父取消；监督不等于异常被吞掉，仍要设计各任务的错误处理。</text>
+</svg>

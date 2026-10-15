@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 510" role="img" aria-labelledby="title desc">
+  <title id="title">Activity 状态与常见回调</title>
+  <desc id="desc">创建进入可见与恢复状态；暂停后可恢复，停止后经重启恢复，结束时销毁。系统杀进程不保证销毁回调。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker>
+    <style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c} .h{font-size:21px;font-weight:700}.t{font-size:16px}.s{font-size:14px;fill:#516a82}.edge{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}.box{fill:#fff;stroke:#bed0e0;stroke-width:1.5}</style>
+  </defs>
+  <rect width="760" height="510" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">页面的状态转换，不等于进程的存亡</text>
+  <text x="28" y="64" class="s">箭头上的名称是进入相应状态的常见回调；图中省略部分特殊路径。</text>
+  <rect class="box" x="265" y="94" width="230" height="64" rx="10"/>
+  <text x="380" y="122" text-anchor="middle" class="t">Created · 已创建</text>
+  <text x="380" y="145" text-anchor="middle" class="s">onCreate</text>
+  <path class="edge" d="M380 158V191"/>
+  <rect class="box" x="265" y="194" width="230" height="64" rx="10"/>
+  <text x="380" y="222" text-anchor="middle" class="t">Started · 可见</text>
+  <text x="380" y="245" text-anchor="middle" class="s">onStart</text>
+  <path class="edge" d="M380 258V291"/>
+  <rect x="265" y="294" width="230" height="64" rx="10" fill="#e0f3ea" stroke="#69a88b" stroke-width="1.5"/>
+  <text x="380" y="322" text-anchor="middle" class="t">Resumed · 恢复</text>
+  <text x="380" y="345" text-anchor="middle" class="s">onResume</text>
+  <path class="edge" d="M495 326H552"/>
+  <text x="525" y="308" text-anchor="middle" class="s">onPause</text>
+  <rect class="box" x="555" y="294" width="178" height="64" rx="10"/>
+  <text x="644" y="322" text-anchor="middle" class="t">Paused · 暂停</text>
+  <text x="644" y="345" text-anchor="middle" class="s">可能仍可见</text>
+  <path class="edge" d="M644 294V276H463V291"/>
+  <text x="535" y="268" class="s">onResume</text>
+  <path class="edge" d="M644 358V392H200V358"/>
+  <text x="530" y="384" class="s">onStop</text>
+  <rect class="box" x="27" y="294" width="175" height="64" rx="10"/>
+  <text x="115" y="322" text-anchor="middle" class="t">Stopped · 停止</text>
+  <text x="115" y="345" text-anchor="middle" class="s">页面不可见</text>
+  <path class="edge" d="M115 294V226H262"/>
+  <text x="37" y="200" class="s">onRestart → onStart</text>
+  <path class="edge" d="M115 358V420"/>
+  <rect class="box" x="27" y="423" width="175" height="58" rx="10"/>
+  <text x="115" y="448" text-anchor="middle" class="t">Destroyed · 销毁</text>
+  <text x="115" y="469" text-anchor="middle" class="s">onDestroy</text>
+  <rect x="265" y="423" width="468" height="58" rx="10" fill="#fff1dd" stroke="#e1b873"/>
+  <text x="284" y="447" class="t">系统回收进程：对象与内存状态消失</text>
+  <text x="284" y="470" class="s">不保证 onDestroy；重要数据不能只在此时保存。</text>
+</svg>

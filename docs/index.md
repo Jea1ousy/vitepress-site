@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: 查看工作流
       link: /codex-workflow
+    - theme: alt
+      text: 移动端八股
+      link: /mobile/
 
 features:
   - title: 快速开始
@@ -20,5 +23,9 @@ features:
     details: 用计划、项目规则和可复用 Skill 管理复杂任务。
   - title: 远程与扩展
     details: 覆盖代理、SSH、tmux 以及第三方 provider 的安全边界。
+  - title: Android 与移动端八股
+    details: 用问答、原理图和代码串起 Android、Kotlin、Compose、性能、iOS 与跨端开发。
+    link: /mobile/
+    linkText: 查看学习地图
 ---
 

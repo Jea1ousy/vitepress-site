@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" role="img" aria-labelledby="title desc">
+  <title id="title">Handler 消息与线程边界</title>
+  <desc id="desc">工作线程向主线程消息队列投递任务，主线程 Looper 取消息并通过 Handler 分发，再回到下一次取消息。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker><style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c}.h{font-size:21px;font-weight:700}.t{font-size:16px}.s{font-size:14px;fill:#516a82}.edge{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}.box{fill:#fff;stroke:#bed0e0;stroke-width:1.5}</style></defs>
+  <rect width="760" height="440" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">Handler 没有创建线程：它把工作交给目标 Looper</text>
+  <rect x="25" y="67" width="190" height="310" rx="12" fill="#e9effa" stroke="#bed0e0"/>
+  <text x="45" y="99" class="t">线程 A · 调用方</text>
+  <rect class="box" x="43" y="137" width="154" height="73" rx="8"/>
+  <text x="120" y="166" text-anchor="middle" class="t">handler.post</text>
+  <text x="120" y="190" text-anchor="middle" class="s">或 sendMessage</text>
+  <text x="46" y="266" class="s">投递后继续执行</text>
+  <text x="46" y="291" class="s">不在这里更新 UI</text>
+  <rect x="277" y="67" width="458" height="310" rx="12" fill="#eaf5ef" stroke="#b5d7c4"/>
+  <text x="297" y="99" class="t">线程 B · 目标主 Looper 所在线程</text>
+  <rect class="box" x="302" y="137" width="408" height="73" rx="8"/>
+  <text x="322" y="162" class="t">MessageQueue</text>
+  <rect x="322" y="175" width="76" height="23" rx="4" fill="#dde9f7"/><text x="360" y="192" text-anchor="middle" class="s">msg A</text>
+  <rect x="411" y="175" width="76" height="23" rx="4" fill="#dde9f7"/><text x="449" y="192" text-anchor="middle" class="s">msg B</text>
+  <rect x="500" y="175" width="76" height="23" rx="4" fill="#dde9f7"/><text x="538" y="192" text-anchor="middle" class="s">msg C</text>
+  <path class="edge" d="M197 173H299"/><text x="220" y="154" class="s">投递</text>
+  <path class="edge" d="M407 210V248"/>
+  <rect class="box" x="302" y="251" width="185" height="77" rx="8"/>
+  <text x="395" y="282" text-anchor="middle" class="t">Looper 循环</text><text x="395" y="307" text-anchor="middle" class="s">next → dispatch</text>
+  <path class="edge" d="M487 290H521"/>
+  <rect class="box" x="524" y="251" width="186" height="77" rx="8"/>
+  <text x="617" y="282" text-anchor="middle" class="t">目标 Handler</text><text x="617" y="307" text-anchor="middle" class="s">执行回调 / 更新 UI</text>
+  <path class="edge" d="M617 328V352H395V331"/>
+  <text x="28" y="413" class="s">队列没有可运行消息时可以阻塞等待；执行长任务时则会推迟后续输入和绘制。</text>
+</svg>
