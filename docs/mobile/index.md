@@ -10,7 +10,7 @@ outline: [2, 3]
 
 写作形式参考[小林 coding 的 HTTP 面试题](https://xiaolincoding.com/network/2_http/http_interview.html)：按主题组织问题，用图解和例子解释机制，再回答常见追问。本文内容为围绕移动端重新整理的原创讲解。
 
-当前共 **13 个专题、128 道问答**，配有流程图、状态图、时序图、代码与对比表。每章结尾还有实验或自测，顶部搜索可以按关键词回查。
+当前共 **27 个专题、300 道问答、40 处图解**，分为基础总览与进阶专项，配有流程图、状态图、时序图、代码与对比表。可从[全部题目索引](./questions)直接跳到答案，或沿[官方资料与源码路线](./resources)继续深入。
 
 ::: tip 怎么用这套八股
 每题先用 30 秒说清结论，再用 2 分钟讲原理、边界和一个项目例子。能够解释“为什么这样做、什么时候不适用、如何验证”，比背 API 名字更有用。
@@ -23,7 +23,7 @@ outline: [2, 3]
   { title: '质量与交付', detail: '性能、测试、安全与发布验证用户体验' }
 ]" caption="图中是理解问题的分层，不表示所有请求都必须经过相同的技术栈。" />
 
-## 章节目录
+## 基础总览：先连起完整知识体系
 
 | 章节 | 你需要回答的核心问题 | 建议优先级 |
 | --- | --- | --- |
@@ -40,6 +40,27 @@ outline: [2, 3]
 | [11 · iOS 与 Swift 基础](./ios) | ARC、RunLoop、Swift 并发和声明式 UI 有何特点？ | 按岗位 |
 | [12 · Flutter、React Native 与 KMP](./cross-platform) | 跨端到底复用哪一层，性能代价在哪里？ | 按岗位 |
 | [13 · 场景设计与面试自测](./scenarios) | 如何设计信息流、搜索、下载和可靠发布？ | P0 |
+
+## 进阶专项：实现、故障与源码追问
+
+| 专题 | 本轮补充的重点 | 建议前置 |
+| --- | --- | --- |
+| [14 · 集合、类加载与运行时](./collections-runtime) | 扩容、树化、并发容器、紧凑集合、引用队列与 ART | 01 |
+| [15 · Kotlin 机制与互操作](./kotlin-advanced) | lazy 模式、委托、密封类型、值类、SAM 与 JVM 边界 | 01 |
+| [16 · 线程池、锁与并发故障](./java-concurrency) | 队列与拒绝、ThreadLocal、Future、AQS 与死锁 | 01、05 |
+| [17 · Framework 与 Binder 深入](./framework-internals) | Zygote、启动事务、Provider 顺序、重入与调用身份 | 02、03 |
+| [18 · 渲染管线与复杂列表](./rendering-advanced) | inflate、重复测量、RenderNode、Surface、缓冲与恢复 | 04 |
+| [19 · 协程状态机与 Flow](./coroutines-internals) | Continuation、任务树、取消竞争、Channel 与共享策略 | 05 |
+| [20 · Compose 状态、布局与测试](./compose-advanced) | Snapshot、组合身份、延后读取、Subcompose 与语义 | 06 |
+| [21 · 网络协议与 OkHttp](./network-advanced) | TCP、HTTP/2/3、TLS、调度、拦截器与连接复用 | 08 |
+| [22 · 数据库与离线同步](./storage-advanced) | WAL、索引、执行计划、keyset、Outbox 与原子文件 | 08 |
+| [23 · 性能诊断与线上治理](./performance-diagnostics) | Perfetto、等待链、retained size、PSS、LMK 与分位数 | 09 |
+| [24 · 音视频与相机](./media-camera) | PCM、封装、GOP、时间戳、MediaCodec、DRM 与 CameraX | 04、08、09 |
+| [25 · 构建、Native 与安全](./build-native-security) | 变体、依赖、KSP、JNI、ABI、页大小与外部入口 | 10 |
+| [26 · iOS Runtime 与并发](./ios-advanced) | 写时复制、消息派发、actor 重入、Sendable 与列表 | 11 |
+| [27 · 跨端架构与性能](./cross-platform-advanced) | Flutter 更新、Fabric、TurboModules、KMP/Swift 互操作 | 12 |
+
+进阶题不是按题号越大就越难排序。Android 岗优先 14—25，iOS 与跨端专项按岗位要求补充；每个专题都附有失败场景或实验路线。
 
 P0 表示 Android 岗位优先掌握；P1 表示需要结合项目深入。iOS、Flutter、React Native 和 KMP 是移动端拓展，并不要求每个 Android 候选人都熟练使用全部框架。
 
@@ -58,6 +79,11 @@ P0 表示 Android 岗位优先掌握；P1 表示需要结合项目深入。iOS�
 | 数据库和网络谁是真相来源？ | [离线优先架构](./network-storage#offline-first) |
 | ANR 都是主线程执行了 5 秒吗？ | [不同 ANR 类型](./performance#anr) |
 | 跨端是不是一定更省人力？ | [选型中的共享边界](./cross-platform#selection) |
+| 无界队列下 maximumPoolSize 为什么可能不起作用？ | [线程池调度](./java-concurrency#pool-dispatch) |
+| limitedParallelism 能限制在途请求数吗？ | [执行并行度与业务并发](./coroutines-internals#parallelism) |
+| 数据库为什么越翻页越慢？ | [OFFSET 与 keyset](./storage-advanced#keyset) |
+| 系统低内存杀进程能被全局异常捕获吗？ | [LMK 与 OOM](./performance-diagnostics#lmk-oom) |
+| 图片缓存命中，为什么视频仍因授权失败不能播？ | [媒体缓存与 DRM](./media-camera#cache-drm) |
 
 ## 建议学习路线
 
@@ -71,6 +97,15 @@ P0 表示 Android 岗位优先掌握；P1 表示需要结合项目深入。iOS�
 6. **第 11—14 天：场景模拟与岗位专项。** 用最后一章自测，再按 JD 补 iOS 或跨端。
 
 这是一条可调整的学习顺序，并不是在两周内掌握全部知识的承诺。每天至少选择一题，在设备上做实验验证。
+
+### 继续深入的四条路线
+
+- **源码与系统：** 14 → 16 → 17 → 18，画清对象、线程、进程和显示管线。
+- **现代 UI 与并发：** 15 → 19 → 20，重点验证取消、状态观察、恢复和任务身份。
+- **业务与质量：** 21 → 22 → 23 → 25，用离线信息流串起协议、存储、排障与交付。
+- **岗位专项：** 视频/直播/相机岗加 24，iOS 加 26，Flutter/RN/KMP 加 27。
+
+每条路线的源码入口、可验证实验与官方阅读链接见[资料路线](./resources)。
 
 ### 已有项目经验，准备深入追问
 

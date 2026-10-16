@@ -55,7 +55,9 @@ export default defineConfig({
     sidebar: {
       '/mobile/': [
         { text: 'Android 与移动端八股', items: [
-          { text: '学习地图与题目索引', link: '/mobile/' }
+          { text: '学习地图', link: '/mobile/' },
+          { text: '全部题目索引', link: '/mobile/questions' },
+          { text: '官方资料与源码路线', link: '/mobile/resources' }
         ] },
         { text: '01 · 语言与系统基础', collapsed: false, items: [
           { text: 'Java、Kotlin 与运行时', link: '/mobile/language' },
@@ -77,6 +79,28 @@ export default defineConfig({
           { text: 'iOS 与 Swift 基础', link: '/mobile/ios' },
           { text: 'Flutter、React Native 与 KMP', link: '/mobile/cross-platform' },
           { text: '场景设计与面试自测', link: '/mobile/scenarios' }
+        ] },
+        { text: '05 · 语言与并发进阶', collapsed: true, items: [
+          { text: '14 · 集合、类加载与运行时', link: '/mobile/collections-runtime' },
+          { text: '15 · Kotlin 机制与互操作', link: '/mobile/kotlin-advanced' },
+          { text: '16 · 线程池、锁与并发故障', link: '/mobile/java-concurrency' }
+        ] },
+        { text: '06 · 系统、UI 与协程进阶', collapsed: true, items: [
+          { text: '17 · Framework 与 Binder', link: '/mobile/framework-internals' },
+          { text: '18 · 渲染管线与复杂列表', link: '/mobile/rendering-advanced' },
+          { text: '19 · 协程状态机与 Flow', link: '/mobile/coroutines-internals' },
+          { text: '20 · Compose 状态与布局', link: '/mobile/compose-advanced' }
+        ] },
+        { text: '07 · 数据、性能与工程专项', collapsed: true, items: [
+          { text: '21 · 网络协议与 OkHttp', link: '/mobile/network-advanced' },
+          { text: '22 · 数据库与离线同步', link: '/mobile/storage-advanced' },
+          { text: '23 · 性能诊断与线上治理', link: '/mobile/performance-diagnostics' },
+          { text: '24 · 音视频与相机', link: '/mobile/media-camera' },
+          { text: '25 · 构建、Native 与安全', link: '/mobile/build-native-security' }
+        ] },
+        { text: '08 · iOS 与跨端深入', collapsed: true, items: [
+          { text: '26 · iOS Runtime 与并发', link: '/mobile/ios-advanced' },
+          { text: '27 · 跨端架构与性能', link: '/mobile/cross-platform-advanced' }
         ] }
       ],
       '/': [

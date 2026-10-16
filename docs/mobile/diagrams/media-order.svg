@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 390" role="img" aria-labelledby="title desc">
+  <title id="title">视频解码顺序与呈现顺序可能不同</title>
+  <desc id="desc">示意显示顺序 I0 B1 B2 P3，但解码需要先得到 P3，因此解码顺序可以是 I0 P3 B1 B2。PTS 和 DTS 表达不同时间职责。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker><style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c}.h{font-size:21px;font-weight:700}.t{font-size:18px}.s{font-size:14px;fill:#516a82}.e{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}</style></defs>
+  <rect width="760" height="390" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">解码完成，不等于这一帧应该立刻呈现</text>
+  <text x="28" y="65" class="s">示意性的帧重排序；编号表示呈现次序，实际依赖按编码标准与码流确定。</text>
+  <text x="30" y="125" class="t">解码顺序</text><text x="30" y="279" class="t">呈现顺序</text>
+  <g fill="#dde9f7" stroke="#9cb9d9"><rect x="155" y="96" width="105" height="57" rx="8"/><rect x="295" y="96" width="105" height="57" rx="8"/><rect x="435" y="96" width="105" height="57" rx="8"/><rect x="575" y="96" width="105" height="57" rx="8"/></g>
+  <g text-anchor="middle" class="t"><text x="208" y="132">I₀</text><text x="348" y="132">P₃</text><text x="488" y="132">B₁</text><text x="628" y="132">B₂</text></g>
+  <path class="e" d="M208 153V245"/><path class="e" d="M348 153C348 190 628 210 628 245"/><path class="e" d="M488 153C488 190 348 210 348 245"/><path class="e" d="M628 153C628 190 488 210 488 245"/>
+  <g fill="#e0f3ea" stroke="#83b99f"><rect x="155" y="248" width="105" height="57" rx="8"/><rect x="295" y="248" width="105" height="57" rx="8"/><rect x="435" y="248" width="105" height="57" rx="8"/><rect x="575" y="248" width="105" height="57" rx="8"/></g>
+  <g text-anchor="middle" class="t"><text x="208" y="284">I₀</text><text x="348" y="284">B₁</text><text x="488" y="284">B₂</text><text x="628" y="284">P₃</text></g>
+  <text x="30" y="347" class="s">DTS 关注解码安排，PTS 关注呈现安排；播放器还需把媒体时间映射到播放时钟。</text>
+  <text x="30" y="371" class="s">网络到达时间和解码结束时间，都不能直接代替媒体的呈现时间。</text>
+</svg>

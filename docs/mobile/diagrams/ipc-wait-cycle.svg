@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 445" role="img" aria-labelledby="title desc">
+  <title id="title">持锁跨进程调用形成等待环的示例</title>
+  <desc id="desc">进程 A 的线程 T1 持锁 L 并同步等待 B，B 等待 A 另一个线程 T3 的结果，T3 又等待锁 L，形成等待环。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker><marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#c45757"/></marker><style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c}.h{font-size:21px;font-weight:700}.t{font-size:17px}.s{font-size:14px;fill:#516a82}.e{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}</style></defs>
+  <rect width="760" height="445" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">持锁跨 IPC：沿等待关系检查是否形成环</text>
+  <rect x="30" y="74" width="330" height="268" rx="12" fill="#e9f0fb" stroke="#bed0e0"/>
+  <rect x="400" y="74" width="330" height="268" rx="12" fill="#eaf5ef" stroke="#b5d7c4"/>
+  <text x="50" y="105" class="t">进程 A</text><text x="420" y="105" class="t">进程 B</text>
+  <rect x="62" y="128" width="266" height="65" rx="9" fill="#fff" stroke="#bed0e0"/>
+  <text x="195" y="155" text-anchor="middle" class="t">T1：持有业务锁 L</text><text x="195" y="180" text-anchor="middle" class="s">同步等待 B 返回</text>
+  <rect x="432" y="128" width="266" height="65" rx="9" fill="#fff" stroke="#bed0e0"/>
+  <text x="565" y="155" text-anchor="middle" class="t">T2：处理远程请求</text><text x="565" y="180" text-anchor="middle" class="s">等待 A 中另一任务的结果</text>
+  <path class="e" d="M328 160H429"/>
+  <text x="378" y="145" text-anchor="middle" class="s">调用</text>
+  <rect x="62" y="247" width="266" height="65" rx="9" fill="#fff1dd" stroke="#dcb778"/>
+  <text x="195" y="274" text-anchor="middle" class="t">T3：尝试获取 L</text><text x="195" y="299" text-anchor="middle" class="s">需要 T1 先释放锁</text>
+  <path class="e" d="M565 193V279H331"/>
+  <text x="543" y="267" class="s">等待回调结果</text>
+  <path d="M195 247V196" fill="none" stroke="#c45757" stroke-width="2.5" marker-end="url(#r)"/>
+  <text x="212" y="224" class="s">等待锁 L</text>
+  <rect x="30" y="362" width="700" height="62" rx="9" fill="#fff" stroke="#bed0e0"/>
+  <text x="48" y="387" class="s">假设：A 的回调由另一个线程执行。真实 Binder 嵌套调用可能有重入，</text>
+  <text x="48" y="409" class="s">需按实际线程与锁语义分析，不能认定所有同步嵌套调用都会死锁。</text>
+</svg>

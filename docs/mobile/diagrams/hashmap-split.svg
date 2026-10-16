@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" role="img" aria-labelledby="title desc">
+  <title id="title">HashMap 容量从 16 到 32 时的桶拆分</title>
+  <desc id="desc">原桶 3 的节点按 hash 与 16 按位与的结果分成桶 3 和桶 19，不需重新调用 key 的 hashCode。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#557293"/></marker><style>text{font-family:system-ui,'Microsoft YaHei',sans-serif;fill:#20354c}.h{font-size:21px;font-weight:700}.t{font-size:17px}.s{font-size:14px;fill:#516a82}.e{fill:none;stroke:#557293;stroke-width:2;marker-end:url(#a)}</style></defs>
+  <rect width="760" height="430" rx="12" fill="#f3f7fb"/>
+  <text x="28" y="37" class="h">扩容两倍：只看新增的那一位</text>
+  <text x="28" y="66" class="s">OpenJDK 21 HashMap 示例；hash 指实现中用于定位桶的哈希值。</text>
+  <rect x="85" y="90" width="590" height="82" rx="10" fill="#fff" stroke="#bed0e0"/>
+  <text x="105" y="118" class="t">旧容量 16 · 桶索引 3</text>
+  <g fill="#dde9f7"><rect x="110" y="133" width="110" height="27" rx="5"/><rect x="250" y="133" width="110" height="27" rx="5"/><rect x="390" y="133" width="110" height="27" rx="5"/><rect x="530" y="133" width="110" height="27" rx="5"/></g>
+  <g text-anchor="middle" class="s"><text x="165" y="152">hash = 3</text><text x="305" y="152">hash = 19</text><text x="445" y="152">hash = 35</text><text x="585" y="152">hash = 51</text></g>
+  <path class="e" d="M380 172V203"/>
+  <rect x="245" y="206" width="270" height="49" rx="9" fill="#e0f3ea" stroke="#83b99f"/>
+  <text x="380" y="237" text-anchor="middle" class="t">检查 hash &amp; oldCap，即 &amp; 16</text>
+  <path class="e" d="M380 255V278H205V310"/><path class="e" d="M380 278H555V310"/>
+  <text x="198" y="273" text-anchor="middle" class="s">结果为 0</text><text x="560" y="273" text-anchor="middle" class="s">结果非 0</text>
+  <rect x="60" y="313" width="290" height="69" rx="10" fill="#e6effb" stroke="#9cb9d9"/>
+  <rect x="410" y="313" width="290" height="69" rx="10" fill="#fff1dd" stroke="#dcb778"/>
+  <text x="205" y="341" text-anchor="middle" class="t">新桶 3：hash 3、35</text><text x="555" y="341" text-anchor="middle" class="t">新桶 19：hash 19、51</text>
+  <text x="205" y="366" text-anchor="middle" class="s">保留原索引</text><text x="555" y="366" text-anchor="middle" class="s">原索引 + 旧容量</text>
+  <text x="28" y="411" class="s">仍需分配新表和迁移节点；省去重新计算 hashCode，不等于扩容没有成本。</text>
+</svg>

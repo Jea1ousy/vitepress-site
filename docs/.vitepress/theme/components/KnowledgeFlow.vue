@@ -3,11 +3,12 @@ defineProps<{
   title: string
   steps: { title: string; detail: string }[]
   caption?: string
+  parallel?: boolean
 }>()
 </script>
 
 <template>
-  <figure class="knowledge-flow" :aria-label="title">
+  <figure class="knowledge-flow" :class="{ 'flow-comparison': parallel }" :aria-label="title">
     <figcaption>
       <strong>{{ title }}</strong>
       <span v-if="caption">{{ caption }}</span>
@@ -74,6 +75,9 @@ defineProps<{
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
+}
+.flow-comparison li + li::before {
+  display: none;
 }
 .knowledge-flow li > strong {
   display: block;
