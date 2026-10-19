@@ -166,3 +166,56 @@ val results = query
 ## 面试前自测
 
 写一个协程程序，让两个子任务分别失败，观察普通 scope 与 supervisor 的区别。再连续更新 StateFlow，刻意让收集端变慢，验证它为什么不是事件队列。
+
+### 自测参考答案
+
+下面的 JVM 示例依赖 `kotlinx-coroutines-core`，用于观察直接子任务的失败传播；`runBlocking` 只用于这个控制台入口，不放进 Android 主线程。
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    try {
+        coroutineScope {
+            launch { delay(100); error("A failed") }
+            launch {
+                try {
+                    delay(300)
+                    error("B failed")
+                } finally {
+                    println("ordinary B cleanup")
+                }
+            }
+        }
+    } catch (e: IllegalStateException) {
+        println("ordinary: ${e.message}")
+    }
+
+    val handler = CoroutineExceptionHandler { _, e ->
+        println("supervised: ${e.message}")
+    }
+    supervisorScope {
+        launch(handler) { delay(100); error("A failed") }
+        launch(handler) { delay(300); error("B failed") }
+    }
+}
+```
+
+**预期：** 普通 scope 中 A 失败会取消 B，B 通常只执行清理而到不了自己的 `error`，异常由外层捕获。监督作用域中两个直接子任务独立失败，handler 分别记录异常。supervisor 不会自动吞异常；若作用域块本身抛异常，仍会取消其子任务。使用 `async` 时需观察 `await` 的异常，不能把 handler 当作统一接收器。[官方：异常传播与监督](https://kotlinlang.org/docs/exception-handling.html)。
+
+**StateFlow 实验：** 在同一个 `runBlocking` 中执行以下片段，并补充 `import kotlinx.coroutines.flow.*`：
+
+```kotlin
+val state = MutableStateFlow(0)
+val collector = launch(start = CoroutineStart.UNDISPATCHED) {
+    state.collect { value ->
+        println("received: $value")
+        delay(100) // 模拟慢消费者
+    }
+}
+repeat(5) { state.value = it + 1 }
+delay(250)
+collector.cancelAndJoin()
+```
+
+这个受控顺序下会先收到 0，随后收到最新的 5，中间 1～4 不必逐条送达；相等值的更新也会被抑制。StateFlow 表达当前状态，不能承担可靠事件队列。需要逐条处理时再明确缓冲、背压和确认机制，跨进程重启可靠性还需要持久化。[官方：StateFlow 合并语义](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)。

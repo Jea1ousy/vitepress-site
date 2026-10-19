@@ -111,3 +111,31 @@ Kotlin 默认参数不意味着 Java 自动获得所有短参数重载；`@JvmOv
 ## 面试练习
 
 把一个 Kotlin SDK 暴露给 Java：包含默认参数、值类、密封结果和 suspend API，逐项检查调用方式。再用字节码查看器或反编译工具验证你的解释；不要把反编译结果当成所有版本的语言契约。
+
+### 练习参考答案
+
+| SDK 特性 | Java 调用侧的答案 | 建议的公开边界 |
+| --- | --- | --- |
+| 默认参数 | 通常只有完整参数签名；加 `@JvmOverloads` 才按规则生成额外重载 | 对少量常用组合提供明确重载，避免依赖编译器的默认参数辅助方法 |
+| 值类 | JVM 表示可能被拆箱或装箱，含值类的函数还可能改写名称，不能假定 Java 能像普通类一样构造和调用 | 稳定 Java API 可接收 String/long 或普通包装 DTO，在 Kotlin 内部转换；采用编译器提供的装箱暴露能力时核对版本与开关 |
+| 密封结果 | Java 可按实际生成的子类判断分支，通过 getter 取数据；不能直接照搬 Kotlin 的 `when` 写法 | 可提供明确的结果子类型或 visitor，分支扩展时检查 Java 源码和二进制兼容 |
+| `suspend` 方法 | JVM 层包含 Continuation 等协程协议，并不是 Java 自动得到 Future | 提供 callback 或平台支持的 Future 适配，约定执行线程、取消、异常与 scope 所有者 |
+
+默认参数与静态入口见[Java 互操作官方文档](https://kotlinlang.org/docs/java-to-kotlin-interop.html)；值类的表示和 Java 暴露条件见[值类官方文档](https://kotlinlang.org/docs/inline-classes.html)。
+
+例如把普通 Kotlin 门面暴露给 Java：
+
+```kotlin
+class Client {
+    @JvmOverloads
+    fun label(id: String, prefix: String = "user"): String = "$prefix:$id"
+}
+```
+
+```java
+Client client = new Client();
+String a = client.label("42");
+String b = client.label("42", "member");
+```
+
+**验证方法：** 固定 Kotlin 编译器、JVM target 和 JDK 版本，在独立 Java 调用模块编译这些入口；用 `javap -p -s` 或 IDE 字节码工具检查重载、名称和签名。异步适配还应分别测试成功、失败、取消和所有者销毁；不能只看到 Continuation 参数就宣称 Java 接口已可用。验证旧 Java 客户端能否调用新 SDK 时，要保留旧编译产物进行运行测试。

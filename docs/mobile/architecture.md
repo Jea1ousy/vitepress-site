@@ -100,3 +100,22 @@ Paging 管理分页加载、失效、重试和加载状态等过程。PagingSour
 ## 面试前自测
 
 拿一个已有页面，画出 UI → 状态所有者 → Repository → 数据源的依赖关系。标注每个对象的作用域，并说明如何在不联网、不等待真实时间的条件下测试失败与重试。
+
+### 自测参考答案
+
+以文章列表为例，依赖方向可以写成：
+
+```text
+Fragment / Composable → FeedViewModel → FeedRepository 接口
+                                      └─ 实现 → ArticleDao + RemoteApi
+UI 发送刷新动作 → ViewModel 协调 → Repository 更新数据库
+UI 收集 UiState ← ViewModel 转换 ← 数据库 Flow
+```
+
+UI 和绑定对象跟随 View 或组合生命周期；ViewModel 跟随选定页面或导航图作用域；Repository 可按应用或账号作用域复用，DAO 跟随数据库实例，网络客户端通常共享连接资源。作用域必须显式选择，应用级对象不能捕获页面，账号相关实例和任务要支持注销清理。
+
+**不联网的测试：** 注入可编程 Fake Repository 或 Fake RemoteApi，使第一次调用返回可重试错误，第二次成功；注入测试 dispatcher，在 `runTest` 中使用同一个测试调度器推进虚拟时间。若逻辑读取时钟或计算随机退避，还要注入时钟与随机源；不要留下真实 `sleep` 或未替换的 IO dispatcher。
+
+**应核对的结果：** 初始缓存可见，刷新失败保留旧列表并显示错误；到达退避期限前不发请求，重试后显示新数据并清除错误；取消页面任务后不再继续页面级重试。额外验证重复点击不会并发刷新、旧账号结果不能落入新账号。观察中间状态时让收集端及时消费，不要求 StateFlow 保留所有瞬时值。
+
+ViewModel 单元测试检查状态与协调，Repository 集成测试再检查真实数据库事务、去重和迁移；仅使用 Fake 不能证明 SQL 正确。见[测试分层](#testing)与[离线优先](./network-storage#offline-first)。
