@@ -8,6 +8,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'LLM 架构', link: '/bilibili' },
+      { text: 'Agent 学习', link: '/agent/', activeMatch: '^/agent/' },
       { text: '移动端八股', link: '/mobile/', activeMatch: '^/mobile/' },
       {
         text: '文档',
@@ -53,6 +54,23 @@ export default defineConfig({
     returnToTopLabel: '回到顶部',
     docFooter: { prev: '上一篇', next: '下一篇' },
     sidebar: {
+      '/agent/': [
+        { text: 'Agent 学习', items: [
+          { text: '学习地图', link: '/agent/' }
+        ] },
+        { text: '基础篇', collapsed: false, items: [
+          { text: '01 · 工具基座与智能体编程', link: '/agent/tools' },
+          { text: '02 · 核心公式与 Harness', link: '/agent/core' },
+          { text: '03 · 上下文工程', link: '/agent/context' },
+          { text: '04 · 记忆与知识库', link: '/agent/memory' }
+        ] },
+        { text: '工程与进阶', collapsed: false, items: [
+          { text: '05 · 工具生态与 MCP', link: '/agent/mcp' },
+          { text: '06 · Coding Agent', link: '/agent/coding-agent' },
+          { text: '07 · 评估与持续进化', link: '/agent/eval-evolution' },
+          { text: '08 · 交互与多智能体', link: '/agent/interaction-multiagent' }
+        ] }
+      ],
       '/mobile/': [
         { text: 'Android 与移动端八股', items: [
           { text: '学习地图', link: '/mobile/' },
@@ -104,6 +122,10 @@ export default defineConfig({
         ] }
       ],
       '/': [
+        {
+          text: 'Agent 学习',
+          items: [{ text: 'AI Agent 学习地图', link: '/agent/' }]
+        },
         {
           text: '快速开始',
           items: [{ text: '从 0 上手', link: '/codex-from-zero' }]

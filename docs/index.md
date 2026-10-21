@@ -13,6 +13,9 @@ hero:
       text: 查看工作流
       link: /codex-workflow
     - theme: alt
+      text: Agent 学习
+      link: /agent/
+    - theme: alt
       text: 移动端八股
       link: /mobile/
 
@@ -23,6 +26,10 @@ features:
     details: 用计划、项目规则和可复用 Skill 管理复杂任务。
   - title: 远程与扩展
     details: 覆盖代理、SSH、tmux 以及第三方 provider 的安全边界。
+  - title: AI Agent 学习
+    details: 以 Missing Semester 与《深入理解 AI Agent》为主线，从工具基座、上下文工程学到评估与多智能体。
+    link: /agent/
+    linkText: 查看学习地图
   - title: Android 与移动端八股
     details: 用问答、原理图和代码串起 Android、Kotlin、Compose、性能、iOS 与跨端开发。
     link: /mobile/
